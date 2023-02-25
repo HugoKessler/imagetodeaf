@@ -77,25 +77,12 @@ function VideoToImages() {
     }
   };
 
-  const handleTimeframeChange = (event) => {
-    const newTimeframe = parseFloat(event.target.value);
-    setTimeframe(newTimeframe);
-  };
-
   return (
     <div className="container">
       <div className="form">
         <label>
           Select video file:
           <input type="file" accept="video/*" onChange={handleFileChange} />
-        </label>
-        <label>
-          Select timeframe (in seconds):
-          <select value={timeframe} onChange={handleTimeframeChange}>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-          </select>
         </label>
         <button disabled={loading}>Extract frames</button>
       </div>

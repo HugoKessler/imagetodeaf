@@ -5,7 +5,7 @@ import "./Home.css";
 function Home() {
   return (
     <div className="home">
-      <h1 className="title">You can't read this, but welcome to BlindViewer</h1>
+      <h1 className="title">You can't read this, but welcome to BlindView</h1>
 
       <h2 className="subtitle">Choose an option below:</h2>
 
