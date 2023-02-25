@@ -24,7 +24,6 @@ module.exports = function (app) {
       try {
         return done(null);
         const user = await User.findOne({ _id: jwtPayload._id });
-        if (user) 
       } catch (error) {
         capture(error);
       }
