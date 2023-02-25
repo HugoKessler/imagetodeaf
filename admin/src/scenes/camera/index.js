@@ -62,7 +62,7 @@ function Camera(props) {
 
     console.log("c: ", c);
 
-    const response = await API.post({ path: "/video/live", body: c });
+    // const response = await API.post({ path: "/video/live", body: c });
     console.log(response);
 
     // audio reader
