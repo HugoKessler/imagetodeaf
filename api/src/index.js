@@ -14,10 +14,13 @@ const app = express();
 
 const origin = [APP_URL, "http://localhost:8083"];
 app.use(cors({ credentials: true, origin }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(fileUpload({ limits: { fileSize: 1000 * 1024 * 1024 } })); // 10 Mo
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 
 app.use(express.static(__dirname + "/../public"));
 

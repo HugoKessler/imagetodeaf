@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./VideoToImages.css";
+import API from "../../services/api";
 
 function VideoToImages() {
   const [images, setImages] = useState([]);
@@ -47,8 +48,12 @@ function VideoToImages() {
     }
 
     setImages(newImages);
+    console.log(newImages);
     setLoading(false);
     setProgress(0);
+
+    const response = await API.post({ path: "/video", body: newImages });
+    console.log(response);
 
     URL.revokeObjectURL(video.src);
   };
