@@ -61,7 +61,7 @@ function VideoToImages() {
     // audio reader
     if (response.ok) {
       setAudioSrc(response.audioDescription);
-      setImageDescription(response.imageDescription);
+      setImageDescription(response.summaryString);
     }
 
     // const audioData = response.data.audio;
