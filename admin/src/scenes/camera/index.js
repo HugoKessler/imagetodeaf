@@ -66,8 +66,10 @@ function Camera(props) {
     console.log(response);
 
     // audio reader
-    // setAudioSrc(response.audioDescription);
-    // setImageDescription(response.imageDescription);
+    if (response.ok) {
+      setAudioSrc(response.audioDescription);
+      setImageDescription(response.imageDescription);
+    }
   }
 
   return (

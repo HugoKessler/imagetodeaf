@@ -42,8 +42,10 @@ function ImageUpload() {
       console.log(response);
 
       // audio reader
-      // setAudioSrc(response.audioDescription);
-      // setImageDescription(response.imageDescription);
+      if (response.ok) {
+        setAudioSrc(response.audioDescription);
+        setImageDescription(response.imageDescription);
+      }
     }
   };
 
