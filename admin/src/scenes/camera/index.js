@@ -8,6 +8,7 @@ function Camera() {
   const intervalTime = 5000;
   const [imgSrc, setImgSrc] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
+  const [imageDescription, setImageDescription] = useState("Image Description");
 
   useEffect(() => {
     navigator.mediaDevices
@@ -36,6 +37,7 @@ function Camera() {
     const gallery = galleryRef.current;
 
     if (!video || !canvas || !gallery) {
+      console.log("no video or canvas or gallery");
       return;
     }
 
@@ -49,6 +51,7 @@ function Camera() {
     c = canvas.toDataURL("image/png");
 
     const response = await API.post({ path: "/video/live", body: c });
+    console.log(response);
 
     // audio reader
     setAudioSrc(response.audioDescription);

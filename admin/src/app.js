@@ -15,6 +15,8 @@ import { SENTRY_URL } from "./config";
 import "./index.less";
 
 export default () => {
+  // const [audio] = useState(new Audio("localhost:8082/admin/src/assets/1677335270.mp3"));
+
   return (
     <div style={{ display: "flex", height: "100%" }}>
       <Router>
@@ -28,6 +30,7 @@ export default () => {
             </Switch>
           </div>
         </div>
+        {/* <button onClick={() => audio.play()}>Play</button> */}
       </Router>
     </div>
   );
