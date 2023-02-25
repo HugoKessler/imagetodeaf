@@ -9,10 +9,6 @@ if (ENVIRONMENT === "development") {
   APP_URL = "http://localhost:8083";
 }
 
-if (ENVIRONMENT === "production") {
-  APP_URL = "http://snu-app-production.eba-urmwmjyu.eu-west-3.elasticbeanstalk.com";
-}
-
 module.exports = {
   PORT,
   MONGO_URL,
