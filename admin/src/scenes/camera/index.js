@@ -5,8 +5,8 @@ import Transcript from "../../components/transcript";
 function Camera(props) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const galleryRef = useRef(null);
-  const liveRef = useRef(null);
+  // const galleryRef = useRef(null);
+  // const liveRef = useRef(null);
 
   const [width, setWidth] = useState(null);
 
@@ -46,9 +46,9 @@ function Camera(props) {
     console.log("here");
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const gallery = galleryRef.current;
+    // const gallery = galleryRef.current;
 
-    if (!video || !canvas || !gallery) {
+    if (!video) {
       console.log("no video or canvas or gallery");
       return;
     }
@@ -58,7 +58,9 @@ function Camera(props) {
 
     const img = new Image();
 
-    c = canvas.toDataURL("image/png");
+    const c = canvas.toDataURL("image/png");
+
+    console.log("c: ", c);
 
     const response = await API.post({ path: "/video/live", body: c });
     console.log(response);
@@ -71,7 +73,7 @@ function Camera(props) {
   return (
     <div>
       <video ref={videoRef} width={width} autoPlay onClick={takeScreenshot}></video>
-      <div></div>
+      <canvas ref={canvasRef} width="320" height="240" style={{ display: "none" }}></canvas>
       {audioSrc && (
         <audio controls>
           <source src={`data:audio/wav;base64,${audioSrc}`} type="audio/wav" />
