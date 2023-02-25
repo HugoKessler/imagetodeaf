@@ -6,7 +6,8 @@ function VideoToImages() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [timeframe, setTimeframe] = useState(1);
+  const [timeframe, setTimeframe] = useState(10);
+  const [audioSrc, setAudioSrc] = useState(null);
 
   const processVideo = async (file) => {
     const video = document.createElement("video");
@@ -55,6 +56,17 @@ function VideoToImages() {
     const response = await API.post({ path: "/video/file", body: newImages });
     console.log(response);
 
+    // audio reader
+    // setAudioSrc(response);
+
+    // const audioData = response.data.audio;
+    // const audioBlob = new Blob([audioData], { type: "audio/mpeg" });
+    // const audioUrl = URL.createObjectURL(audioBlob);
+
+    // const audio = document.createElement("audio");
+    // audio.src = audioUrl;
+    // document.body.appendChild(audio);
+
     URL.revokeObjectURL(video.src);
   };
 
@@ -89,6 +101,12 @@ function VideoToImages() {
       </div>
       {loading && <div className="progress" style={{ width: `${progress}%` }}></div>}
       <div className="grid">
+        {audioSrc && (
+          <audio controls>
+            <source src={`data:audio/wav;base64,${audioSrc}`} type="audio/wav" />
+            Your browser does not support the audio element.
+          </audio>
+        )}
         {images.map((imageData, index) => (
           <img key={index} src={imageData} alt={`Frame ${index}`} />
         ))}
