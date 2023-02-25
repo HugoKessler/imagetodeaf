@@ -52,7 +52,7 @@ function VideoToImages() {
     setLoading(false);
     setProgress(0);
 
-    const response = await API.post({ path: "/video", body: newImages });
+    const response = await API.post({ path: "/video/file", body: newImages });
     console.log(response);
 
     URL.revokeObjectURL(video.src);

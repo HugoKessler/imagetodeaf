@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import API from "../../services/api";
 
 function Camera() {
   const videoRef = useRef(null);
@@ -46,7 +47,7 @@ function Camera() {
 
     c = canvas.toDataURL("image/png");
 
-    const response = await API.post({ path: "/camera", body: c });
+    const response = await API.post({ path: "/video/live", body: c });
   }
 
   return (

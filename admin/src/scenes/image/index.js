@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import API from "../../services/api";
 
 function ImageUpload() {
   const [imageFile, setImageFile] = useState(null);
@@ -32,11 +33,11 @@ function ImageUpload() {
     img.src = URL.createObjectURL(file);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (imageBase64) {
-      console.log(imageBase64);
+      const response = await API.post({ path: "/video/image", body: c });
     }
   };
 
