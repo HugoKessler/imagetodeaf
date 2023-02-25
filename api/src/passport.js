@@ -22,8 +22,8 @@ module.exports = function (app) {
     "user",
     new JwtStrategy(opts, async function (jwtPayload, done) {
       try {
-        return done(null);
         const user = await User.findOne({ _id: jwtPayload._id });
+        if (user) return done(null, user);
       } catch (error) {
         capture(error);
       }
@@ -35,8 +35,6 @@ module.exports = function (app) {
     "admin",
     new JwtStrategy(opts, async function (jwtPayload, done) {
       try {
-        return done(null);
-
         const user = await User.findOne({ _id: jwtPayload._id });
         if (user && user.role === "admin") return done(null, user);
       } catch (error) {

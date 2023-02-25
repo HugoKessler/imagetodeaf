@@ -11,7 +11,7 @@ const { PORT, APP_URL } = require("./config.js");
 const app = express();
 
 const origin = [APP_URL];
-app.use(cors({ credentials: true, origin }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.use(express.static(__dirname + "/../public"));
 
 app.use("/user", require("./controllers/user"));
+app.use("/video", require("./controllers/video"));
 
 console.log("RUNNING ON 1", PORT);
 const d = new Date();
