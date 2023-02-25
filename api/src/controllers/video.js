@@ -23,13 +23,13 @@ router.post("/file", async (req, res) => {
       body: JSON.stringify({ text: imageDescriptions, tokens_amount: token }),
     });
 
-    const summaryAudio = await fetch(pythonApiUrl + "/audio/", {
+    const audioDescription = await fetch(pythonApiUrl + "/audio/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: summaryString.data.caption }),
     });
 
-    res.status(200).send({ ok: true, data: summaryAudio });
+    res.status(200).send({ ok: true, data: { audioDescription, summaryString } });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -54,7 +54,7 @@ router.post("/live", async (req, res) => {
       body: JSON.stringify({ text: imageDescription.data.caption }),
     });
     //send images to python api
-    res.status(200).send({ ok: true, data: audioDescription });
+    res.status(200).send({ ok: true, data: { audioDescription, imageDescription } });
 
     // res.json(images);
   } catch (error) {
@@ -78,7 +78,7 @@ router.post("/image", async (req, res) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: imageDescription.data.caption }),
     });
-    res.status(200).send({ ok: true, data: audioDescription });
+    res.status(200).send({ ok: true, data: { audioDescription, imageDescription } });
 
     // res.json(images);
   } catch (error) {

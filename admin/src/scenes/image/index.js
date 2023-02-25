@@ -42,7 +42,7 @@ function ImageUpload() {
       console.log(response);
 
       // audio reader
-      // setAudioSrc(response);
+      // setAudioSrc(response.audioDescription);
     }
   };
 

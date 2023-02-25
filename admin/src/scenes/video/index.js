@@ -57,7 +57,7 @@ function VideoToImages() {
     console.log(response);
 
     // audio reader
-    // setAudioSrc(response);
+    // setAudioSrc(response.audioDescription);
 
     // const audioData = response.data.audio;
     // const audioBlob = new Blob([audioData], { type: "audio/mpeg" });

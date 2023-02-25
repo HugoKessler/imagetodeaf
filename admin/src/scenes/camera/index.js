@@ -51,7 +51,7 @@ function Camera() {
     const response = await API.post({ path: "/video/live", body: c });
 
     // audio reader
-    // setAudioSrc(response);
+    setAudioSrc(response.audioDescription);
   }
 
   return (
