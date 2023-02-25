@@ -7,7 +7,7 @@ function VideoToImages() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [timeframe, setTimeframe] = useState(10);
+  const [timeframe, setTimeframe] = useState(40);
   const [audioSrc, setAudioSrc] = useState(null);
   const [imageDescription, setImageDescription] = useState("Video description");
 
