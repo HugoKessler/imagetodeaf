@@ -2,16 +2,26 @@ import React, { useRef, useState, useEffect } from "react";
 import API from "../../services/api";
 import Transcript from "../../components/transcript";
 
-function Camera() {
+function Camera(props) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const galleryRef = useRef(null);
+  const liveRef = useRef(null);
+
+  const [width, setWidth] = useState(null);
+
+  const { screen } = props;
+  const screenWidth = 0;
+
   const intervalTime = 5000;
   const [imgSrc, setImgSrc] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
   const [imageDescription, setImageDescription] = useState("Image Description");
 
   useEffect(() => {
+    const screenWidth = screen.current.clientWidth;
+    setWidth(screenWidth);
+
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -48,8 +58,6 @@ function Camera() {
 
     const img = new Image();
 
-    //todo: need to send image to backend
-
     c = canvas.toDataURL("image/png");
 
     const response = await API.post({ path: "/video/live", body: c });
@@ -62,7 +70,7 @@ function Camera() {
 
   return (
     <div>
-      <video ref={videoRef} width="100%" autoPlay onClick={takeScreenshot}></video>
+      <video ref={videoRef} width={width} autoPlay onClick={takeScreenshot}></video>
       <div></div>
       {audioSrc && (
         <audio controls>

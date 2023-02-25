@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +14,7 @@ import Image from "./scenes/image";
 import "./index.less";
 
 export default () => {
+  const screen = useRef(null);
   const audio = new Audio("https://github.com/HugoKessler/imagetodeaf/blob/master/admin/src/assets/audioIntro.mp3?raw=true");
   const [audioReaded, setAudioReaded] = useState(false);
 
@@ -28,12 +29,12 @@ export default () => {
       }}
     >
       <Router>
-        <div className="main">
+        <div ref={screen} className="main">
           <div className="screen-container">
             <div className="live">
               <div className="content">
                 <div className="mode-frame">
-                  <Camera />
+                  <Camera screen={screen} />
                 </div>
               </div>
               <ModeTitle className="live" text="LIVE"></ModeTitle>

@@ -9,7 +9,7 @@ function VideoToImages() {
   const [progress, setProgress] = useState(0);
   const [timeframe, setTimeframe] = useState(10);
   const [audioSrc, setAudioSrc] = useState(null);
-  const [imageDescription, setImageDescription] = useState("test");
+  const [imageDescription, setImageDescription] = useState("Video description");
 
   const processVideo = async (file) => {
     const video = document.createElement("video");
