@@ -36,7 +36,7 @@ function Camera(props) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      takeScreenshot();
+      // takeScreenshot();
     }, intervalTime);
 
     return () => clearInterval(interval);
