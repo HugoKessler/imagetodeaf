@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const fetch = require("node-fetch");
+const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const pythonApiUrl = "http://localhost:5000";
 router.post("/file", async (req, res) => {
