@@ -38,7 +38,7 @@ function ImageUpload() {
     event.preventDefault();
 
     if (imageBase64) {
-      const response = await API.post({ path: "/video/file", body: base64String });
+      // const response = await API.post({ path: "/video/file", body: base64String });
       console.log(response);
 
       // audio reader
