@@ -7,6 +7,7 @@ function Camera() {
   const galleryRef = useRef(null);
   const intervalTime = 5000;
   const [imgSrc, setImgSrc] = useState(null);
+  const [audioSrc, setAudioSrc] = useState(null);
 
   useEffect(() => {
     navigator.mediaDevices

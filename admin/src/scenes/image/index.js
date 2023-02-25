@@ -5,6 +5,7 @@ function ImageUpload() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageBase64, setImageBase64] = useState(null);
+  const [audioSrc, setAudioSrc] = useState(null);
 
   const canvasRef = useRef(null);
 
@@ -37,7 +38,11 @@ function ImageUpload() {
     event.preventDefault();
 
     if (imageBase64) {
-      const response = await API.post({ path: "/video/image", body: c });
+      const response = await API.post({ path: "/video/file", body: base64String });
+      console.log(response);
+
+      // audio reader
+      // setAudioSrc(response);
     }
   };
 
@@ -61,6 +66,12 @@ function ImageUpload() {
 
         <button type="submit">Upload Image</button>
       </form>
+      {audioSrc && (
+        <audio controls>
+          <source src={`data:audio/wav;base64,${audioSrc}`} type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
+      )}
     </div>
   );
 }
