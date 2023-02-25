@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Home from "./scenes/home";
 import Video from "./scenes/video";
+import Camera from "./scenes/camera";
+import Image from "./scenes/image";
 
 import api from "./services/api";
 
@@ -20,8 +22,8 @@ export default () => {
           <div className="screen-container">
             <Switch>
               <Route path="/video" component={Video} />
-              <Route path="/live" component={Video} />
-              <Route path="/image" component={Video} />
+              <Route path="/live" component={Camera} />
+              <Route path="/image" component={Image} />
               <Route path="/" component={Home} />
             </Switch>
           </div>
