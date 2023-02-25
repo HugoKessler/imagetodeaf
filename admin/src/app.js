@@ -19,33 +19,7 @@ import { SENTRY_URL } from "./config";
 
 import "./index.less";
 
-if (process.env.NODE_ENV === "production") SENTRY_URL && Sentry.init({ dsn: SENTRY_URL, environment: "app" });
-
 export default () => {
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.Auth.user);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await api.get("/user/signin_token");
-        if (!res.ok || !res.user) return setLoading(false);
-        if (res.token) api.setToken(res.token);
-
-        dispatch(setUser(res.user));
-      } catch (e) {
-        console.log(e);
-      }
-      setLoading(false);
-    }
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div style={{ display: "flex", height: "100%" }}>
       <Router>
@@ -54,18 +28,11 @@ export default () => {
           {user && <Header />}
           <div className="screen-container">
             <Switch>
-              <Route path="/auth" component={Auth} />
-              <RestrictedRoute path="/account" component={Account} />
-              <RestrictedRoute path="/" component={User} />
+              <Route path="/" component={User} />
             </Switch>
           </div>
         </div>
       </Router>
     </div>
   );
-};
-
-const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => {
-  const user = useSelector((state) => state.Auth.user);
-  return <Route {...rest} render={(props) => (user ? <Component {...props} /> : <Redirect to={{ pathname: "/auth" }} />)} />;
 };
