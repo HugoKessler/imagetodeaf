@@ -43,6 +43,7 @@ function ImageUpload() {
 
       // audio reader
       // setAudioSrc(response.audioDescription);
+      // setImageDescription(response.imageDescription);
     }
   };
 

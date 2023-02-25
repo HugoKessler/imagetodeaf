@@ -60,6 +60,7 @@ function VideoToImages() {
 
     // audio reader
     // setAudioSrc(response.audioDescription);
+    // setImageDescription(response.imageDescription);
 
     // const audioData = response.data.audio;
     // const audioBlob = new Blob([audioData], { type: "audio/mpeg" });

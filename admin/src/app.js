@@ -14,10 +14,19 @@ import Image from "./scenes/image";
 import "./index.less";
 
 export default () => {
-  // const [audio] = useState(new Audio("localhost:8082/admin/src/assets/1677335270.mp3"));
+  const audio = new Audio("https://github.com/HugoKessler/imagetodeaf/blob/master/admin/src/assets/audioIntro.mp3?raw=true");
+  const [audioReaded, setAudioReaded] = useState(false);
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div
+      style={{ display: "flex", height: "100%" }}
+      onClick={() => {
+        if (!audioReaded) {
+          audio.play();
+          setAudioReaded(true);
+        }
+      }}
+    >
       <Router>
         <div className="main">
           <div className="screen-container">
@@ -39,7 +48,6 @@ export default () => {
             </div>
           </div>
         </div>
-        {/* <button onClick={() => audio.play()}>Play</button> */}
       </Router>
     </div>
   );
