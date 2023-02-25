@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import User from "./scenes/user";
+import Home from "./scenes/home";
 import Video from "./scenes/video";
 
 import api from "./services/api";
@@ -20,7 +20,9 @@ export default () => {
           <div className="screen-container">
             <Switch>
               <Route path="/video" component={Video} />
-              <Route path="/" component={User} />
+              <Route path="/live" component={Video} />
+              <Route path="/image" component={Video} />
+              <Route path="/" component={Home} />
             </Switch>
           </div>
         </div>
