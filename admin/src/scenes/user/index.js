@@ -5,10 +5,5 @@ import User from "./list";
 import UserView from "./view";
 
 export default () => {
-  return (
-    <Switch>
-      <Route path="/admin/user/:id" component={UserView} />
-      <Route path="/" component={User} />
-    </Switch>
-  );
+  return <div>You are here</div>;
 };

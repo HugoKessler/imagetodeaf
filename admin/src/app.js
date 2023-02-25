@@ -24,8 +24,6 @@ export default () => {
     <div style={{ display: "flex", height: "100%" }}>
       <Router>
         <div className="main">
-          {user && <Drawer />}
-          {user && <Header />}
           <div className="screen-container">
             <Switch>
               <Route path="/" component={User} />
