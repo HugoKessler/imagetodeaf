@@ -41,7 +41,7 @@ router.post("/live", async (req, res) => {
   try {
     console.log("you are here");
     console.log(req.body);
-    const image = req.body;
+    const image = req.body.image;
 
     console.log("image", image);
     const imageDescription = await fetch(pythonApiUrl + "/text/", {
