@@ -49,6 +49,9 @@ function Camera() {
     c = canvas.toDataURL("image/png");
 
     const response = await API.post({ path: "/video/live", body: c });
+
+    // audio reader
+    // setAudioSrc(response);
   }
 
   return (
@@ -56,6 +59,12 @@ function Camera() {
       <video ref={videoRef} width="320" height="240" autoPlay></video>
       <canvas ref={canvasRef} width="320" height="240" style={{ display: "none" }}></canvas>
       <div></div>
+      {audioSrc && (
+        <audio controls>
+          <source src={`data:audio/wav;base64,${audioSrc}`} type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
+      )}
     </div>
   );
 }
