@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import API from "../../services/api";
+import Transcript from "../../components/transcript";
 
 function Camera() {
   const videoRef = useRef(null);
@@ -8,6 +9,7 @@ function Camera() {
   const intervalTime = 5000;
   const [imgSrc, setImgSrc] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
+  const [imageDescription, setImageDescription] = useState("Image Description");
 
   useEffect(() => {
     navigator.mediaDevices
@@ -31,11 +33,13 @@ function Camera() {
   }, []);
 
   async function takeScreenshot() {
+    console.log("here");
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const gallery = galleryRef.current;
 
     if (!video || !canvas || !gallery) {
+      console.log("no video or canvas or gallery");
       return;
     }
 
@@ -49,9 +53,11 @@ function Camera() {
     c = canvas.toDataURL("image/png");
 
     const response = await API.post({ path: "/video/live", body: c });
+    console.log(response);
 
     // audio reader
-    setAudioSrc(response.audioDescription);
+    // setAudioSrc(response.audioDescription);
+    // setImageDescription(response.imageDescription);
   }
 
   return (
@@ -64,6 +70,7 @@ function Camera() {
           Your browser does not support the audio element.
         </audio>
       )}
+      <Transcript text={imageDescription} />
     </div>
   );
 }

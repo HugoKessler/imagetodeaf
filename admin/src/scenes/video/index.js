@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./VideoToImages.css";
 import API from "../../services/api";
+import Transcript from "../../components/transcript";
 
 function VideoToImages() {
   const [images, setImages] = useState([]);
@@ -8,6 +9,7 @@ function VideoToImages() {
   const [progress, setProgress] = useState(0);
   const [timeframe, setTimeframe] = useState(10);
   const [audioSrc, setAudioSrc] = useState(null);
+  const [imageDescription, setImageDescription] = useState("test");
 
   const processVideo = async (file) => {
     const video = document.createElement("video");
@@ -98,6 +100,7 @@ function VideoToImages() {
           <img key={index} src={imageData} alt={`Frame ${index}`} />
         ))}
       </div>
+      <Transcript text={imageDescription} />
     </div>
   );
 }
