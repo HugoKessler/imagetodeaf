@@ -1,27 +1,18 @@
 const express = require("express");
 
 const router = express.Router();
+const fs = require("fs");
+const { promisify } = require("util");
+const exec = promisify(require("child_process").exec);
 
 router.post("/", async (req, res) => {
   try {
     console.log("you are here");
+    console.log(req.body);
+    console.log(req.files);
     const video = req.files.video;
-    const fps = 30;
-
-    const canvas = createCanvas(640, 480);
-    const ctx = canvas.getContext("2d");
-
-    const images = [];
-
-    const videoDuration = await getVideoDuration(video);
-
-    for (let i = 0; i < videoDuration; i += 1 / fps) {
-      const frame = await getVideoFrame(video, i);
-      ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL("image/png");
-      images.push(imageData);
-    }
-
+    const images = await extractFrames(video);
+    console.log(images);
     res.json(images);
   } catch (error) {
     console.error(error);
@@ -29,35 +20,27 @@ router.post("/", async (req, res) => {
   }
 });
 
-function getVideoDuration(video) {
-  return new Promise((resolve, reject) => {
-    const videoPath = video.tempFilePath;
-    ffmpeg.ffprobe(videoPath, (error, metadata) => {
-      if (error) reject(error);
-      resolve(metadata.format.duration);
-    });
-  });
-}
+async function extractFrames(video) {
+  const videoPath = video.tempFilePath;
+  const outputPath = "/tmp/frame-%03d.png";
+  const command = `ffmpeg -i ${videoPath} -vf fps=1 ${outputPath}`;
 
-function getVideoFrame(video, time) {
-  return new Promise((resolve, reject) => {
-    const videoPath = video.tempFilePath;
-    const framePath = `/tmp/frame-${time}.png`;
+  await exec(command);
 
-    ffmpeg(videoPath)
-      .seek(time)
-      .frames(1)
-      .on("error", reject)
-      .on("end", () => {
-        loadImage(framePath)
-          .then((image) => {
-            fs.unlinkSync(framePath);
-            resolve(image);
-          })
-          .catch(reject);
-      })
-      .save(framePath);
-  });
+  const images = [];
+
+  // Read the extracted images from the output directory
+  const files = fs.readdirSync("/tmp");
+  for (const file of files) {
+    if (file.startsWith("frame-") && file.endsWith(".png")) {
+      const imagePath = `/tmp/${file}`;
+      const imageData = fs.readFileSync(imagePath, { encoding: "base64" });
+      images.push(`data:image/png;base64,${imageData}`);
+      fs.unlinkSync(imagePath);
+    }
+  }
+
+  return images;
 }
 
 module.exports = router;

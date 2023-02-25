@@ -1,182 +1,91 @@
+import URI from "urijs";
+import { apiURL } from "../config";
+import fetchRetry from "fetch-retry";
 import "isomorphic-fetch";
 
-import { apiURL } from "../config";
+let fetch = window.fetch;
 
-class api {
+class ApiService {
   constructor() {
     this.token = "";
-  }
-
-  getToken() {
-    return this.token;
-  }
-
-  esQuery(queries) {
-    let query = "";
-    for (let i = 0; i < queries.length; i++) {
-      query += `${JSON.stringify(queries[i])}\n`;
-    }
-
-    return fetch(`${apiURL}/es/_msearch`, {
-      mode: "cors",
-      method: "POST",
-      redirect: "follow",
-      referrer: "no-referrer",
-      headers: { "Content-Type": "application/x-ndjson", Authorization: `JWT ${this.token}` },
-      body: query,
-    })
-      .then((r) => r.json())
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  getTotal(response) {
-    return (response && response.hits && response.hits.total) || 0;
-  }
-
-  getHits(response) {
-    return (response && response.hits && response.hits.hits) || [];
-  }
-
-  getAggregations(response, name) {
-    if (response && response.aggregations && response.aggregations[name]) {
-      if (response.aggregations[name].buckets) {
-        let obj = {};
-        for (let i = 0; i < response.aggregations[name].buckets.length; i++) {
-          obj[response.aggregations[name].buckets[i].key] = response.aggregations[name].buckets[i].doc_count;
-        }
-        return obj;
-      }
-    }
-    return {};
   }
 
   setToken(token) {
     this.token = token;
   }
-  getToken() {
-    return this.token;
-  }
 
-  get(path) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(`${apiURL}${path}`, {
-          mode: "cors",
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json", Authorization: `JWT ${this.token}` },
-        });
+  getUrl = (path, query = {}) => {
+    return new URI().origin(apiURL).path(path).setSearch(query).toString();
+  };
 
-        const res = await response.json();
-        resolve(res);
-      } catch (e) {
-        reject(e);
+  execute = async ({ method, path = "", body = null, query = {}, headers = {} } = {}) => {
+    try {
+      const options = {
+        method,
+        credentials: "include",
+        mode: "cors",
+        headers: {
+          ...headers,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `JWT ${this.token}`,
+        },
+        retries: 3,
+        retryDelay: 1000,
+      };
+
+      if (body) options.body = JSON.stringify(body);
+
+      const url = this.getUrl(path, query);
+      // console.log("url", url);
+      const response = await fetch(url, options);
+
+      if (!response.ok && response.status === 401) {
+        if (this.logout) this.logout("401");
       }
-    });
-  }
 
-  put(path, body) {
-    return new Promise(async (resolve, reject) => {
       try {
-        const response = await fetch(`${apiURL}${path}`, {
-          mode: "cors",
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-Type": "application/json", Authorization: `JWT ${this.token}` },
-          body: typeof body === "string" ? body : JSON.stringify(body),
-        });
-
         const res = await response.json();
-        resolve(res);
-      } catch (e) {
-        reject(e);
+        return res;
+      } catch (errorFromJson) {
+        console.log({ errorFromJson });
       }
-    });
-  }
+      return response;
+    } catch (errorExecuteApi) {
+      console.log({ errorExecuteApi });
+    }
+    return {
+      ok: false,
+      error: "Une erreur est survenue, l'équipe technique est prévenue, veuillez nous en excuser.",
+    };
+  };
 
-  putFormData(path, body, files) {
+  post = (args) => this.execute({ method: "POST", ...args });
+  get = async (args) => this.execute({ method: "GET", ...args });
+  put = (args) => this.execute({ method: "PUT", ...args });
+  delete = (args) => this.execute({ method: "DELETE", ...args });
+
+  uploadFile(path, files, properties) {
+    console.log("files", files);
     let formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.append(files[i].name, files[i], files[i].name);
+      formData.append("video", files[i], "video");
     }
-    formData.append("body", JSON.stringify(body));
-
-    return new Promise(async (resolve, reject) => {
+    console.log("formData,", formData);
+    // formData.append("body", JSON.stringify({ ...properties }));
+    return new Promise((resolve, reject) => {
       try {
-        const response = await fetch(`${apiURL}${path}`, {
-          mode: "cors",
-          method: "PUT",
-          credentials: "include",
-          headers: { Authorization: `JWT ${this.token}` },
-          body: formData,
-        });
-        const res = await response.json();
-        resolve(res);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-
-  postFormData(path, body, files) {
-    let formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append(files[i].name, files[i], files[i].name);
-    }
-    formData.append("body", JSON.stringify(body));
-
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(`${apiURL}${path}`, {
+        fetch(this.getUrl(path), {
+          retries: 3,
+          retryDelay: 1000,
+          retryOn: [502, 503, 504],
           mode: "cors",
           method: "POST",
           credentials: "include",
-          headers: {},
           body: formData,
-        });
-        const res = await response.json();
-        resolve(res);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-
-  remove(path) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(`${apiURL}${path}`, {
-          mode: "cors",
-          credentials: "include",
-          method: "DELETE",
-          headers: { "Content-Type": "application/json", Authorization: `JWT ${this.token}` },
-        });
-        const res = await response.json();
-        resolve(res);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-
-  post(path, body) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(`${apiURL}${path}`, {
-          mode: "cors",
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json", Authorization: `JWT ${this.token}` },
-          body: typeof body === "string" ? body : JSON.stringify(body),
-        });
-
-        const res = await response.json();
-        if (response.status !== 200) {
-          return reject(res);
-        }
-        resolve(res);
+        })
+          .then((res) => res.json())
+          .then(resolve);
       } catch (e) {
         reject(e);
       }
@@ -184,5 +93,11 @@ class api {
   }
 }
 
-const API = new api();
+function initApi() {
+  fetch = fetchRetry(window.fetch);
+}
+
+const API = new ApiService();
 export default API;
+
+export { initApi };

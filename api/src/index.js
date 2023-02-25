@@ -4,17 +4,20 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
+
 require("./mongo");
 
 const { PORT, APP_URL } = require("./config.js");
 
 const app = express();
 
-const origin = [APP_URL];
-
+const origin = [APP_URL, "http://localhost:8083"];
+app.use(cors({ credentials: true, origin }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(fileUpload({ limits: { fileSize: 1000 * 1024 * 1024 } })); // 10 Mo
 
 app.use(express.static(__dirname + "/../public"));
 

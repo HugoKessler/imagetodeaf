@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import User from "./scenes/user";
 import Video from "./scenes/video";
+import VideoFront from "./scenes/videofront";
 
 import api from "./services/api";
 
@@ -20,6 +21,8 @@ export default () => {
           <div className="screen-container">
             <Switch>
               <Route path="/video" component={Video} />
+              <Route path="/video2" component={VideoFront} />
+
               <Route path="/" component={User} />
             </Switch>
           </div>
